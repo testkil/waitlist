@@ -18,9 +18,14 @@ async fn pilot_info(
         .fetch_one(app.get_db())
         .await?;
 
+    let tags = sqlx::query!("SELECT tag, name FROM `tags` WHERE id=?", character_id)
+        .fetch_many(app.get_db())
+        .await?;
+    
     Ok(Json(Character {
         id: character.id,
         name: character.name,
+        tags: tags,
     }))
 }
 
